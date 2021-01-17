@@ -25,7 +25,7 @@ import Router from 'next/router';
 import { ORDER_SET } from '../utils/constants';
 import dynamic from 'next/dynamic';
 import { Alert } from '@material-ui/lab';
-const dev = process.env.NODE_ENV === 'development' || true; // remove "|| true" in production
+const dev = process.env.NODE_ENV === 'development'  // remove "|| true" in production
 function Checkout(props) {
   const classes = useStyles();
 
