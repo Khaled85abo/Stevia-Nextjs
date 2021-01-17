@@ -11,10 +11,14 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import { theme } from '../utils/styles';
+import { siteName } from '../utils/config';
 import { Badge, CircularProgress } from '@material-ui/core';
 import { useStyles } from '../utils/styles';
 import { Store } from './Store';
-
+import {
+  CART_RETRIEVE_REQUEST,
+  CART_RETRIEVE_SUCCESS,
+} from '../utils/constants';
 import getCommerce from '../utils/commerce';
 
 export default function Layout({
@@ -24,15 +28,24 @@ export default function Layout({
 }) {
   const classes = useStyles();
 
- 
+  const { state, dispatch } = useContext(Store);
+  const { cart } = state;
 
-  
+  useEffect(() => {
+    const fetchCart = async () => {
+      const commerce = getCommerce(commercePublicKey);
+      dispatch({ type: CART_RETRIEVE_REQUEST });
+      const cartData = await commerce.cart.retrieve();
+      dispatch({ type: CART_RETRIEVE_SUCCESS, payload: cartData });
+    };
+    fetchCart();
+  }, []);
 
   return (
     <React.Fragment>
       <Head>
         <meta charSet="utf-8" />
-        <title>{`${title}`}</title>
+        <title>{`${title} - ${siteName}`}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="viewport"
@@ -57,7 +70,7 @@ export default function Layout({
                 href="/"
                 className={classes.toolbarTitle}
               >
-                {title}
+                {siteName}
               </Link>
             </NextLink>
 
@@ -69,7 +82,15 @@ export default function Layout({
                   href="/cart"
                   className={classes.link}
                 >
-                    Cart
+                  {cart.loading ? (
+                    <CircularProgress />
+                  ) : cart.data.total_items > 0 ? (
+                    <Badge badgeContent={cart.data.total_items} color="primary">
+                      Cart
+                    </Badge>
+                  ) : (
+                    'Cart'
+                  )}
                 </Link>
               </NextLink>
             </nav>
@@ -84,7 +105,7 @@ export default function Layout({
           <Box mt={5}>
             <Typography variant="body2" color="textSecondary" align="center">
               {'© '}
-              Stevia 2021
+              {siteName} 2021
               {'.'}
             </Typography>
           </Box>

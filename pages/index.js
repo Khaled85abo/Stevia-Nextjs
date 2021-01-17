@@ -1,5 +1,4 @@
 import Layout from '../components/Layout';
-import styles from '../styles/Home.module.css'
 import getCommerce from '../utils/commerce'
 import {Alert} from '@material-ui/lab'
 import { CardActionArea, CardContent, Card, Slide, Grid, Box,  CardMedia, Typography } from '@material-ui/core';
@@ -31,7 +30,7 @@ export default function Home(props) {
                   </CardContent>
                 </CardActionArea>
               </Link>
-              </Card>
+            </Card>
            </Slide>
          </Grid>
 
